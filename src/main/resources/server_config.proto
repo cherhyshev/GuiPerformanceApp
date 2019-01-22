@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_outer_classname = "Configurations";
+
+message ServerConfig {
+    enum ArchitectureType {
+        SIMPLE_BLOCKING = 0;
+        THREAD_POOL_BLOCKING = 1;
+        NON_BLOCKING = 2;
+    }
+    ArchitectureType type = 1;
+    int32 port = 2;
+}
