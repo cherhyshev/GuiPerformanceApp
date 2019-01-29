@@ -1,6 +1,5 @@
 package ru.hse.spb.server;
 
-import org.apache.xmlbeans.impl.soap.MessageFactory;
 import org.junit.Test;
 import ru.hse.spb.client.ClientUtils;
 import ru.hse.spb.common.CommonUtils;
@@ -12,7 +11,8 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NonBlockingServerTest {
     @Test
