@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+option java_package = "ru.hse.spb.common.protocol";
 option java_outer_classname = "Messages";
 
 

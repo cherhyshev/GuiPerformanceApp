@@ -1,13 +1,16 @@
 package ru.hse.spb.server;
 
+import java.net.ServerSocket;
+
 public class NonBlockingServer extends AbstractServer {
-    @Override
-    void start(int port) {
-        throw new UnsupportedOperationException("No implementation for NonBlockingServer");
+    private final int serverPort;
+
+    public NonBlockingServer(int port) {
+        this.serverPort = port;
     }
 
     @Override
-    void stop() {
+    public void run() {
         throw new UnsupportedOperationException("No implementation for NonBlockingServer");
     }
 }

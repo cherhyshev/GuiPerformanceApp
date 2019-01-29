@@ -2,27 +2,25 @@ package ru.hse.spb.server;
 
 import ru.hse.spb.common.benchmark.AverageTime;
 
-public abstract class AbstractServer {
-    private final AverageTime averageSortingTime = new AverageTime();
-    private final AverageTime averageClientProcessing = new AverageTime();
+public abstract class AbstractServer implements Runnable {
+    protected final AverageTime sortingTime = new AverageTime();
+    protected final AverageTime processingTime = new AverageTime();
 
-    abstract void start(int port);
-
-    abstract void stop();
-
-    void addClientProcessingTime(final long time) {
-        averageClientProcessing.addTime(time);
+    final double getAverageSortingTime() {
+        return sortingTime.getAverageTime();
     }
 
-    final long getAverageClientProcessingTime() {
-        return averageClientProcessing.getAverageTime();
+    final double getAverageProcessingTime() {
+        return processingTime.getAverageTime();
     }
 
-    void addSortingTime(final long time) {
-        averageSortingTime.addTime(time);
+    final void addSortingTime(long time) {
+        sortingTime.addTime(time);
     }
 
-    final long getAverageSortingTime() {
-        return averageSortingTime.getAverageTime();
+    final void addProcessingTime(long time) {
+        processingTime.addTime(time);
     }
+
+
 }

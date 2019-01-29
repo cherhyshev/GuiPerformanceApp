@@ -1,18 +1,25 @@
 package ru.hse.spb.common.benchmark;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 public class AverageTime {
+    private volatile AtomicInteger statCount = new AtomicInteger(0);
+    private volatile AtomicLong sumTime = new AtomicLong(0);
+
     public AverageTime() {
     }
 
-    private volatile int statCount = 0;
-    private volatile long sumTime = 0;
-
-    public synchronized void addTime(long time) {
-        statCount++;
-        sumTime += time;
+    public int getStatCount() {
+        return statCount.get();
     }
 
-    public synchronized long getAverageTime() {
-        return statCount == 0 ? -1 : sumTime / statCount;
+    public synchronized void addTime(long time) {
+        statCount.incrementAndGet();
+        sumTime.addAndGet(time);
+    }
+
+    public synchronized double getAverageTime() {
+        return statCount.get() == 0 ? -1 : ((double) sumTime.get()) / statCount.get();
     }
 }

@@ -1,58 +1,24 @@
 package ru.hse.spb.server;
 
 
-import ru.hse.spb.common.protocol.ArrayMessageHandler;
 import ru.hse.spb.common.protocol.Messages;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
-public class SimpleBlockingServer extends AbstractServer {
-    private volatile ServerSocket serverSocket = null;
+public class SimpleBlockingServer extends AbstractBlockingServer {
 
-    @Override
-    public void start(int port) {
-        while (serverSocket == null) {
-            try {
-                serverSocket = new ServerSocket(port);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        new Thread(() -> {
-            while (!serverSocket.isClosed()) {
-                try (Socket clientSocket = serverSocket.accept();
-                     InputStream is = clientSocket.getInputStream();
-                     OutputStream os = clientSocket.getOutputStream()) {
 
-                    while (!clientSocket.isClosed()) {
-                        long processStart = System.currentTimeMillis();
-                        Messages.ArrayMessage receivedMessage = Messages.ArrayMessage.parseFrom(is);
-                        long start = System.currentTimeMillis();
-                        Messages.ArrayMessage resultMessage = ArrayMessageHandler.process(receivedMessage);
-                        addSortingTime(System.currentTimeMillis() - start);
-                        resultMessage.writeTo(os);
-                        addClientProcessingTime(System.currentTimeMillis() - processStart);
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    public SimpleBlockingServer(int port) {
+        super(port);
     }
 
     @Override
-    public void stop() {
-        if (serverSocket != null) {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    protected Messages.ArrayMessage handleRequest(Messages.ArrayMessage messageToSort) {
+        return ServerUtils.getSortedMessage(messageToSort);
+    }
+
+    @Override
+    protected void sendResponse(Messages.ArrayMessage sortedMessage, OutputStream os) {
+        ServerUtils.sendArrayMessage(sortedMessage, os);
     }
 }
