@@ -2,16 +2,34 @@ package ru.hse.spb.server;
 
 import ru.hse.spb.common.benchmark.AverageTime;
 
+import java.net.InetAddress;
+
 public abstract class AbstractServer implements Runnable {
+    protected final int serverPort;
+    protected final InetAddress serverAddress;
+
     protected final AverageTime sortingTime = new AverageTime();
     protected final AverageTime processingTime = new AverageTime();
 
-    final double getAverageSortingTime() {
+    protected AbstractServer(int serverPort, InetAddress serverAddress) {
+        this.serverPort = serverPort;
+        this.serverAddress = serverAddress;
+    }
+
+    public final double getAverageSortingTime() {
         return sortingTime.getAverageTime();
     }
 
-    final double getAverageProcessingTime() {
+    public final double getSortingTimesCounter() {
+        return sortingTime.getStatCount();
+    }
+
+    public final double getAverageProcessingTime() {
         return processingTime.getAverageTime();
+    }
+
+    public final double getProcessingTimesCounter() {
+        return processingTime.getStatCount();
     }
 
     final void addSortingTime(long time) {

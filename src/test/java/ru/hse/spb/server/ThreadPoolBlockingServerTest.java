@@ -7,14 +7,16 @@ import ru.hse.spb.common.protocol.Messages;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import static org.junit.Assert.*;
 
 public class ThreadPoolBlockingServerTest {
     @Test
-    public void handleRequestFromSingleClient() {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(9013);
+    public void handleRequestFromSingleClient() throws UnknownHostException {
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -25,7 +27,7 @@ public class ThreadPoolBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(server.serverSocket.getInetAddress(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), 9013);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -53,7 +55,7 @@ public class ThreadPoolBlockingServerTest {
 
     @Test
     public void handleManyRequestsFromSingleClient() throws IOException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -64,7 +66,7 @@ public class ThreadPoolBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(server.serverSocket.getInetAddress(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), 9013);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -94,26 +96,26 @@ public class ThreadPoolBlockingServerTest {
 
     @Test
     public void handleManyRequestsFromManyClients() throws IOException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Thread[] clientThreads = new Thread[5];
-        for (int id = 0; id < 5; id++) {
+        Thread[] clientThreads = new Thread[15];
+        for (int id = 0; id < clientThreads.length; id++) {
             clientThreads[id] = new Thread(() -> {
                 Socket socket = null;
                 InputStream is = null;
                 OutputStream os = null;
                 try {
-                    socket = new Socket(server.serverSocket.getInetAddress(), 9013);
+                    socket = new Socket(InetAddress.getLocalHost(), 9013);
                     is = socket.getInputStream();
                     os = socket.getOutputStream();
 
-                    for (int j = 0; j < 5; j++) {
-                        Messages.ArrayMessage msg = ClientUtils.generateMessage(100);
+                    for (int j = 0; j < 15; j++) {
+                        Messages.ArrayMessage msg = ClientUtils.generateMessage(1000);
                         msg.writeDelimitedTo(os);
                         os.flush();
                         Messages.ArrayMessage receivedMessage = Messages.ArrayMessage.parseDelimitedFrom(is);

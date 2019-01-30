@@ -10,14 +10,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class NonBlockingServerTest {
     @Test
-    public void handleRequestFromSingleClient() {
-        NonBlockingServer server = new NonBlockingServer(9013);
+    public void handleRequestFromSingleClient() throws UnknownHostException {
+        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -61,8 +62,8 @@ public class NonBlockingServerTest {
     }
 
     @Test
-    public void handleManyRequestsFromSingleClient() {
-        NonBlockingServer server = new NonBlockingServer(9013);
+    public void handleManyRequestsFromSingleClient() throws UnknownHostException {
+        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -108,8 +109,8 @@ public class NonBlockingServerTest {
     }
 
     @Test
-    public void handleManyRequestsFromManyClients() {
-        NonBlockingServer server = new NonBlockingServer(9013);
+    public void handleManyRequestsFromManyClients() throws UnknownHostException {
+        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
         new Thread(server).start();
         try {
             Thread.sleep(1000);

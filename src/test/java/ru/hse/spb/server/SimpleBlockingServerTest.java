@@ -7,14 +7,16 @@ import ru.hse.spb.common.protocol.Messages;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import static org.junit.Assert.*;
 
 public class SimpleBlockingServerTest {
     @Test
-    public void handleRequestFromSingleClient() {
-        SimpleBlockingServer server = new SimpleBlockingServer(9013);
+    public void handleRequestFromSingleClient() throws UnknownHostException {
+        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), 9013);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -25,7 +27,7 @@ public class SimpleBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(server.serverSocket.getInetAddress(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), 9013);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -53,8 +55,8 @@ public class SimpleBlockingServerTest {
 
 
     @Test
-    public void handleManyRequestsFromSingleClient() {
-        SimpleBlockingServer server = new SimpleBlockingServer(9013);
+    public void handleManyRequestsFromSingleClient() throws UnknownHostException {
+        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), 9013);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -65,11 +67,11 @@ public class SimpleBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(server.serverSocket.getInetAddress(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), 9013);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
-            for (int j = 0; j < 625; j++) {
+            for (int j = 0; j < 100; j++) {
                 Messages.ArrayMessage msg = ClientUtils.generateMessage(1000);
                 msg.writeDelimitedTo(os);
                 os.flush();
@@ -96,26 +98,26 @@ public class SimpleBlockingServerTest {
     }
 
     @Test
-    public void handleManyRequestsFromManyClients() {
-        SimpleBlockingServer server = new SimpleBlockingServer(9013);
+    public void handleManyRequestsFromManyClients() throws UnknownHostException {
+        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), 9013);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Thread[] clientThreads = new Thread[25];
-        for (int id = 0; id < 25; id++) {
+        Thread[] clientThreads = new Thread[10];
+        for (int id = 0; id < clientThreads.length; id++) {
             clientThreads[id] = new Thread(() -> {
                 Socket socket = null;
                 InputStream is = null;
                 OutputStream os = null;
                 try {
-                    socket = new Socket(server.serverSocket.getInetAddress(), 9013);
+                    socket = new Socket(InetAddress.getLocalHost(), 9013);
                     is = socket.getInputStream();
                     os = socket.getOutputStream();
 
-                    for (int j = 0; j < 25; j++) {
+                    for (int j = 0; j < 10; j++) {
                         Messages.ArrayMessage msg = ClientUtils.generateMessage(1000);
                         msg.writeDelimitedTo(os);
                         os.flush();
@@ -125,6 +127,11 @@ public class SimpleBlockingServerTest {
                         for (int i = 1; i < receivedMessage.getElementsNum(); i++) {
                             assertTrue(receivedMessage.getArrayElements(i - 1)
                                     <= receivedMessage.getArrayElements(i));
+                        }
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                     socket.close();

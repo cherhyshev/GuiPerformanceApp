@@ -1,8 +1,11 @@
 package ru.hse.spb.server;
 
+import ru.hse.spb.common.CommonUtils;
 import ru.hse.spb.common.protocol.Messages;
 
+import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,8 +13,8 @@ import java.util.concurrent.Executors;
 public class ThreadPoolBlockingServer extends AbstractBlockingServer {
     private final ExecutorService handlingService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    public ThreadPoolBlockingServer(int port) {
-        super(port);
+    public ThreadPoolBlockingServer(InetAddress serverAddress, int port) {
+        super(port, serverAddress);
     }
 
     @Override

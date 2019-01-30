@@ -1,21 +1,23 @@
 package ru.hse.spb.server;
 
 import ru.hse.spb.client.ClientUtils;
+import ru.hse.spb.common.CommonUtils;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 public abstract class AbstractBlockingServer extends AbstractServer {
-    protected int serverPort;
     protected ServerSocket serverSocket = null;
     protected boolean isStopped = false;
 
-    protected AbstractBlockingServer(int port) {
-        this.serverPort = port;
+    protected AbstractBlockingServer(int port, InetAddress serverAddress) {
+        super(port, serverAddress);
     }
 
 
@@ -49,8 +51,8 @@ public abstract class AbstractBlockingServer extends AbstractServer {
                             sendResponse(sortedMessage, output);
                             addProcessingTime(System.currentTimeMillis() - processStart);
                         }
-                    }
 
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -76,7 +78,7 @@ public abstract class AbstractBlockingServer extends AbstractServer {
 
     private void openServerSocket() {
         try {
-            this.serverSocket = new ServerSocket(this.serverPort);
+            this.serverSocket = new ServerSocket(this.serverPort, Integer.MAX_VALUE, serverAddress);
         } catch (IOException e) {
             throw new RuntimeException("Cannot open port " + serverPort, e);
         }

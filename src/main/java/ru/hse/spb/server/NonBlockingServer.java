@@ -18,16 +18,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class NonBlockingServer extends AbstractServer {
-    private int serverPort;
-
     private final ExecutorService executorService =
             Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private volatile Selector selector;
     private volatile ServerSocketChannel serverSocketChannel;
 
-    public NonBlockingServer(int port) {
-        this.serverPort = port;
+    public NonBlockingServer(int port, InetAddress serverAddress) {
+        super(port, serverAddress);
     }
 
 
@@ -38,7 +36,7 @@ public class NonBlockingServer extends AbstractServer {
             serverSocketChannel = ServerSocketChannel.open();
 
             serverSocketChannel.configureBlocking(false);
-            serverSocketChannel.bind(new InetSocketAddress(InetAddress.getLocalHost(), serverPort), Integer.MAX_VALUE);
+            serverSocketChannel.bind(new InetSocketAddress(serverAddress, serverPort), Integer.MAX_VALUE);
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
             while (serverSocketChannel.isOpen()) {
