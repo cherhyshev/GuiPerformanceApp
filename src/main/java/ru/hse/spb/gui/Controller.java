@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import ru.hse.spb.client.ClientUtils;
 import ru.hse.spb.common.Constants;
 
 import java.net.InetAddress;
@@ -79,28 +80,28 @@ public class Controller {
 
         int requestsPerClient = Integer.parseInt(tf_requestsNum.getText());
 
-        Constants.VariableParameter variableParameter = null;
+        ClientUtils.ParameterName parameterName = null;
         int lowBound = Integer.parseInt(tf_varLowBound.getText());
         int highBound = Integer.parseInt(tf_varHighBound.getText());
         int step = Integer.parseInt(tf_varStep.getText());
         int firstParam = 0, secondParam = 0;
 
         if (rb_varOnArraySize.isSelected() && cb_valOnClientsNum.isSelected() && cb_valOnDelay.isSelected()) {
-            variableParameter = Constants.VariableParameter.N;
+            parameterName = ClientUtils.ParameterName.N;
             firstParam = Integer.parseInt(tf_valOnClientsNum.getText());
             secondParam = Integer.parseInt(tf_valOnDelay.getText());
         } else if (rb_varOnClientsNum.isSelected() && cb_valOnArraySize.isSelected() && cb_valOnDelay.isSelected()) {
-            variableParameter = Constants.VariableParameter.M;
+            parameterName = ClientUtils.ParameterName.M;
             firstParam = Integer.parseInt(tf_valOnArraySize.getText());
             secondParam = Integer.parseInt(tf_valOnDelay.getText());
 
         } else if (rb_varOnDelay.isSelected() && cb_valOnArraySize.isSelected() && cb_valOnDelay.isSelected()) {
-            variableParameter = Constants.VariableParameter.D;
+            parameterName = ClientUtils.ParameterName.D;
             firstParam = Integer.parseInt(tf_valOnArraySize.getText());
             secondParam = Integer.parseInt(tf_valOnClientsNum.getText());
         }
 
-        response = new GuiResponse(architecture, serverAddress, requestsPerClient, variableParameter, lowBound, highBound, step, firstParam, secondParam);
+        response = new GuiResponse(architecture, serverAddress, requestsPerClient, parameterName, lowBound, highBound, step, firstParam, secondParam);
         //TODO запускаем сервер, клиенты, начинаем работу
         System.exit(0);
 

@@ -13,22 +13,13 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractClient implements Runnable {
-    protected final int elementsInArray;
-    protected final int deltaInMs;
-    protected final int requestNum;
-    protected final int serverPort;
-    protected final InetAddress serverAddress;
+    private final ClientUtils.ClientConfig clientConfig;
     private volatile long startTime;
     private volatile long finishTime;
 
-    public AbstractClient(int elementsInArray, int deltaInMs, int requestNum,
-                          int serverPort, @NotNull InetAddress serverAddress) {
+    public AbstractClient(@NotNull ClientUtils.ClientConfig clientConfig) {
 
-        this.elementsInArray = elementsInArray;
-        this.deltaInMs = deltaInMs;
-        this.requestNum = requestNum;
-        this.serverPort = serverPort;
-        this.serverAddress = serverAddress;
+        this.clientConfig = clientConfig;
     }
 
     @Override
@@ -38,7 +29,7 @@ public abstract class AbstractClient implements Runnable {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(clientConfig.getServerAddress(), clientConfig.getServerPort());
             is = socket.getInputStream();
             os = socket.getOutputStream();
             startScheduling(socket, is, os);
@@ -52,10 +43,10 @@ public abstract class AbstractClient implements Runnable {
 
     private void startScheduling(Socket socket, InputStream is, OutputStream os) throws IOException {
         startTime = System.currentTimeMillis();
-        for (int j = 0; j < requestNum; j++) {
+        for (int j = 0; j < clientConfig.getRequestNum(); j++) {
             process(is, os);
             try {
-                Thread.sleep(10);
+                Thread.sleep(clientConfig.getDeltaInMs());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -65,4 +56,8 @@ public abstract class AbstractClient implements Runnable {
     }
 
     protected abstract void process(InputStream is, OutputStream os) throws IOException;
+
+    public ClientUtils.ClientConfig getClientConfig() {
+        return clientConfig;
+    }
 }

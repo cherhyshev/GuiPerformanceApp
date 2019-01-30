@@ -1,6 +1,7 @@
 package ru.hse.spb.client;
 
 import org.junit.Test;
+import ru.hse.spb.common.Constants;
 import ru.hse.spb.server.NonBlockingServer;
 
 import java.net.InetAddress;
@@ -11,7 +12,7 @@ import static org.junit.Assert.*;
 public class NonBlockingClientTest {
     @Test
     public void singleClientTest() throws UnknownHostException {
-        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
+        NonBlockingServer server = new NonBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -19,7 +20,7 @@ public class NonBlockingClientTest {
             e.printStackTrace();
         }
 
-        NonBlockingClient client = new NonBlockingClient(100, 10, 50, 9013, InetAddress.getLocalHost());
+        NonBlockingClient client = new NonBlockingClient(new ClientUtils.ClientConfig(100, 10, 50, Constants.SERVER_PROCCESSING_PORT, InetAddress.getLocalHost()));
         Thread clientThread = new Thread(client);
         clientThread.start();
         try {
@@ -38,7 +39,7 @@ public class NonBlockingClientTest {
 
     @Test
     public void manyClientsTest() throws UnknownHostException {
-        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
+        NonBlockingServer server = new NonBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -48,7 +49,7 @@ public class NonBlockingClientTest {
 
         Thread[] clientThreads = new Thread[5];
         for (int i = 0; i < clientThreads.length; i++) {
-            clientThreads[i] = new Thread(new NonBlockingClient(100, 10, 50, 9013, InetAddress.getLocalHost()));
+            clientThreads[i] = new Thread(new NonBlockingClient(new ClientUtils.ClientConfig(100, 10, 50, Constants.SERVER_PROCCESSING_PORT, InetAddress.getLocalHost())));
             clientThreads[i].start();
         }
 

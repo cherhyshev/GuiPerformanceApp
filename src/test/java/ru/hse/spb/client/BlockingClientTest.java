@@ -1,6 +1,7 @@
 package ru.hse.spb.client;
 
 import org.junit.Test;
+import ru.hse.spb.common.Constants;
 import ru.hse.spb.server.SimpleBlockingServer;
 import ru.hse.spb.server.ThreadPoolBlockingServer;
 
@@ -10,7 +11,7 @@ import java.net.UnknownHostException;
 public class BlockingClientTest {
     @Test
     public void singleClientBlockingThreadedTest() throws UnknownHostException {
-        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), 9013);
+        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -18,7 +19,7 @@ public class BlockingClientTest {
             e.printStackTrace();
         }
 
-        BlockingClient client = new BlockingClient(100, 10, 50, 9013, InetAddress.getLocalHost());
+        BlockingClient client = new BlockingClient(new ClientUtils.ClientConfig(100, 10, 50, Constants.SERVER_PROCCESSING_PORT, InetAddress.getLocalHost()));
         Thread clientThread = new Thread(client);
         clientThread.start();
         try {
@@ -37,7 +38,7 @@ public class BlockingClientTest {
 
     @Test
     public void singleClientBlockingThreadPooledTest() throws UnknownHostException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -45,7 +46,7 @@ public class BlockingClientTest {
             e.printStackTrace();
         }
 
-        BlockingClient client = new BlockingClient(100, 10, 50, 9013, InetAddress.getLocalHost());
+        BlockingClient client = new BlockingClient(new ClientUtils.ClientConfig(100, 10, 50, Constants.SERVER_PROCCESSING_PORT, InetAddress.getLocalHost()));
         Thread clientThread = new Thread(client);
         clientThread.start();
         try {
@@ -65,7 +66,7 @@ public class BlockingClientTest {
 
     @Test
     public void manyClientsBlockingThreadedTest() throws UnknownHostException {
-        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), 9013);
+        SimpleBlockingServer server = new SimpleBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -75,7 +76,7 @@ public class BlockingClientTest {
 
         Thread[] clientThreads = new Thread[5];
         for (int i = 0; i < clientThreads.length; i++) {
-            clientThreads[i] = new Thread(new BlockingClient(100, 10, 50, 9013, InetAddress.getLocalHost()));
+            clientThreads[i] = new Thread(new BlockingClient(new ClientUtils.ClientConfig(100, 10, 50, Constants.SERVER_PROCCESSING_PORT, InetAddress.getLocalHost())));
             clientThreads[i].start();
         }
 
@@ -97,7 +98,7 @@ public class BlockingClientTest {
 
     @Test
     public void manyClientsBlockingThreadPooledTest() throws UnknownHostException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -107,7 +108,7 @@ public class BlockingClientTest {
 
         Thread[] clientThreads = new Thread[5];
         for (int i = 0; i < clientThreads.length; i++) {
-            clientThreads[i] = new Thread(new BlockingClient(100, 10, 50, 9013, InetAddress.getLocalHost()));
+            clientThreads[i] = new Thread(new BlockingClient(new ClientUtils.ClientConfig(100, 10, 50, Constants.SERVER_PROCCESSING_PORT, InetAddress.getLocalHost())));
             clientThreads[i].start();
         }
 

@@ -14,7 +14,7 @@ public class ThreadPoolBlockingServer extends AbstractBlockingServer {
     private final ExecutorService handlingService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public ThreadPoolBlockingServer(InetAddress serverAddress, int port) {
-        super(port, serverAddress);
+        super(serverAddress, port);
     }
 
     @Override

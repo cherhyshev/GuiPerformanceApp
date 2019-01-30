@@ -24,8 +24,8 @@ public class NonBlockingServer extends AbstractServer {
     private volatile Selector selector;
     private volatile ServerSocketChannel serverSocketChannel;
 
-    public NonBlockingServer(int port, InetAddress serverAddress) {
-        super(port, serverAddress);
+    public NonBlockingServer(InetAddress serverAddress, int port) {
+        super(serverAddress, port);
     }
 
 

@@ -11,7 +11,7 @@ public abstract class AbstractServer implements Runnable {
     protected final AverageTime sortingTime = new AverageTime();
     protected final AverageTime processingTime = new AverageTime();
 
-    protected AbstractServer(int serverPort, InetAddress serverAddress) {
+    protected AbstractServer(InetAddress serverAddress, int serverPort) {
         this.serverPort = serverPort;
         this.serverAddress = serverAddress;
     }

@@ -13,7 +13,7 @@ public class SimpleBlockingServer extends AbstractBlockingServer {
 
 
     public SimpleBlockingServer(InetAddress serverAddress, int port) {
-        super(port, serverAddress);
+        super(serverAddress, port);
     }
 
     @Override

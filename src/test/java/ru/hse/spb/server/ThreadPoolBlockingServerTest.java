@@ -2,6 +2,7 @@ package ru.hse.spb.server;
 
 import org.junit.Test;
 import ru.hse.spb.client.ClientUtils;
+import ru.hse.spb.common.Constants;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import static org.junit.Assert.*;
 public class ThreadPoolBlockingServerTest {
     @Test
     public void handleRequestFromSingleClient() throws UnknownHostException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -27,7 +28,7 @@ public class ThreadPoolBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(InetAddress.getLocalHost(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -55,7 +56,7 @@ public class ThreadPoolBlockingServerTest {
 
     @Test
     public void handleManyRequestsFromSingleClient() throws IOException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -66,7 +67,7 @@ public class ThreadPoolBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(InetAddress.getLocalHost(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -96,7 +97,7 @@ public class ThreadPoolBlockingServerTest {
 
     @Test
     public void handleManyRequestsFromManyClients() throws IOException {
-        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), 9013);
+        ThreadPoolBlockingServer server = new ThreadPoolBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -110,7 +111,7 @@ public class ThreadPoolBlockingServerTest {
                 InputStream is = null;
                 OutputStream os = null;
                 try {
-                    socket = new Socket(InetAddress.getLocalHost(), 9013);
+                    socket = new Socket(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
                     is = socket.getInputStream();
                     os = socket.getOutputStream();
 

@@ -16,8 +16,8 @@ public abstract class AbstractBlockingServer extends AbstractServer {
     protected ServerSocket serverSocket = null;
     protected boolean isStopped = false;
 
-    protected AbstractBlockingServer(int port, InetAddress serverAddress) {
-        super(port, serverAddress);
+    protected AbstractBlockingServer(InetAddress serverAddress, int port) {
+        super(serverAddress, port);
     }
 
 

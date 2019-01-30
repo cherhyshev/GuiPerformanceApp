@@ -3,6 +3,7 @@ package ru.hse.spb.server;
 import org.junit.Test;
 import ru.hse.spb.client.ClientUtils;
 import ru.hse.spb.common.CommonUtils;
+import ru.hse.spb.common.Constants;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class NonBlockingServerTest {
     @Test
     public void handleRequestFromSingleClient() throws UnknownHostException {
-        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
+        NonBlockingServer server = new NonBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -29,7 +30,7 @@ public class NonBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(InetAddress.getLocalHost(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -63,7 +64,7 @@ public class NonBlockingServerTest {
 
     @Test
     public void handleManyRequestsFromSingleClient() throws UnknownHostException {
-        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
+        NonBlockingServer server = new NonBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -74,7 +75,7 @@ public class NonBlockingServerTest {
         InputStream is = null;
         OutputStream os = null;
         try {
-            socket = new Socket(InetAddress.getLocalHost(), 9013);
+            socket = new Socket(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
             is = socket.getInputStream();
             os = socket.getOutputStream();
 
@@ -110,7 +111,7 @@ public class NonBlockingServerTest {
 
     @Test
     public void handleManyRequestsFromManyClients() throws UnknownHostException {
-        NonBlockingServer server = new NonBlockingServer(9013, InetAddress.getLocalHost());
+        NonBlockingServer server = new NonBlockingServer(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
         new Thread(server).start();
         try {
             Thread.sleep(1000);
@@ -125,7 +126,7 @@ public class NonBlockingServerTest {
                 InputStream is = null;
                 OutputStream os = null;
                 try {
-                    socket = new Socket(InetAddress.getLocalHost(), 9013);
+                    socket = new Socket(InetAddress.getLocalHost(), Constants.SERVER_PROCCESSING_PORT);
                     is = socket.getInputStream();
                     os = socket.getOutputStream();
 
