@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-option java_outer_classname = "Benchmarks";
-
-
-message ServerBenchmark {
-    int64 averageClientProcessingTime = 1;
-    int64 averageRequestProcessingTime = 2;
-}

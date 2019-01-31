@@ -21,4 +21,22 @@ public class ClientFactory {
         }
         return clients;
     }
+
+    public final int getX() {
+        return clientFactoryConfig.getClientConfig().getRequestNum();
+    }
+
+    public final int getN() {
+        return clientFactoryConfig.getClientConfig().getElementsInArray();
+    }
+
+    public final int getD() {
+        return clientFactoryConfig.getClientConfig().getDeltaInMs();
+    }
+
+    public final int getM() {
+        return clientFactoryConfig.getParameterM().getValue();
+    }
+
+
 }

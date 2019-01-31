@@ -1,6 +1,7 @@
 package ru.hse.spb.server;
 
 import ru.hse.spb.common.CommonUtils;
+import ru.hse.spb.common.benchmark.AverageTime;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
@@ -13,8 +14,11 @@ import java.util.concurrent.Executors;
 public class ThreadPoolBlockingServer extends AbstractBlockingServer {
     private final ExecutorService handlingService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    public ThreadPoolBlockingServer(InetAddress serverAddress, int port) {
-        super(serverAddress, port);
+    public ThreadPoolBlockingServer(InetAddress serverAddress,
+                                    int port,
+                                    AverageTime sortingTime,
+                                    AverageTime processingTime) {
+        super(serverAddress, port, sortingTime, processingTime);
     }
 
     @Override

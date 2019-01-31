@@ -22,4 +22,9 @@ public class AverageTime {
     public synchronized double getAverageTime() {
         return statCount.get() == 0 ? -1 : ((double) sumTime.get()) / statCount.get();
     }
+
+    public synchronized void reset() {
+        statCount = new AtomicInteger(0);
+        sumTime = new AtomicLong(0);
+    }
 }

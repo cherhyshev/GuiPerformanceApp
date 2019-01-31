@@ -1,6 +1,7 @@
 package ru.hse.spb.client;
 
 import org.jetbrains.annotations.Nullable;
+import ru.hse.spb.common.CommonUtils;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
@@ -104,7 +105,7 @@ public class ClientUtils {
     public static class RegularParameter extends Parameter {
         private final int value;
 
-        protected RegularParameter(ParameterName parameterName, int value) {
+        public RegularParameter(ParameterName parameterName, int value) {
             super(parameterName);
             this.value = value;
         }
@@ -120,7 +121,7 @@ public class ClientUtils {
         private final int step;
 
 
-        protected VariableParameter(ParameterName parameterName, int start, int limit, int step) {
+        public VariableParameter(ParameterName parameterName, int start, int limit, int step) {
             super(parameterName);
             this.start = start;
             this.limit = limit;
@@ -140,30 +141,33 @@ public class ClientUtils {
         }
     }
 
-    public static class ClientFactoryGeneratorConfig {
+    public static class ClientMasterConfig {
         private final VariableParameter variableParameter;
         private final RegularParameter parameterX;
         private final RegularParameter parameter1;
         private final RegularParameter parameter2;
-        private final int serverPort;
         private final InetAddress serverAddress;
-        private final boolean isBlocking;
+        private final int serverMasterPort;
+        private final int serverProcessingPort;
+        private final CommonUtils.ArchitectureType architectureType;
 
-
-        public ClientFactoryGeneratorConfig(VariableParameter variableParameter,
-                                            RegularParameter parameterX,
-                                            RegularParameter parameter1,
-                                            RegularParameter parameter2,
-                                            int serverPort, InetAddress serverAddress,
-                                            boolean isBlocking) {
+        public ClientMasterConfig(VariableParameter variableParameter,
+                                  RegularParameter parameterX,
+                                  RegularParameter parameter1,
+                                  RegularParameter parameter2,
+                                  InetAddress serverAddress,
+                                  int serverMasterPort,
+                                  int serverProcessingPort,
+                                  CommonUtils.ArchitectureType architectureType) {
 
             this.variableParameter = variableParameter;
             this.parameterX = parameterX;
             this.parameter1 = parameter1;
             this.parameter2 = parameter2;
-            this.serverPort = serverPort;
+            this.serverMasterPort = serverMasterPort;
+            this.serverProcessingPort = serverProcessingPort;
             this.serverAddress = serverAddress;
-            this.isBlocking = isBlocking;
+            this.architectureType = architectureType;
         }
 
         public VariableParameter getVariableParameter() {
@@ -182,16 +186,24 @@ public class ClientUtils {
             return parameter2;
         }
 
-        public int getServerPort() {
-            return serverPort;
-        }
-
         public InetAddress getServerAddress() {
             return serverAddress;
         }
 
+        public int getServerMasterPort() {
+            return serverMasterPort;
+        }
+
+        public int getServerProcessingPort() {
+            return serverProcessingPort;
+        }
+
+        public CommonUtils.ArchitectureType getArchitectureType() {
+            return architectureType;
+        }
+
         public boolean isBlocking() {
-            return isBlocking;
+            return architectureType != CommonUtils.ArchitectureType.NON_BLOCKING;
         }
     }
 

@@ -1,10 +1,9 @@
 package ru.hse.spb.common;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-import org.jetbrains.annotations.NotNull;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.*;
+import java.util.concurrent.ExecutorService;
 
 public class CommonUtils {
     public static Messages.ArrayMessage deserialize(byte[] message) throws IOException {
@@ -21,5 +20,23 @@ public class CommonUtils {
         message.writeTo(byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
+
+    public static void delicateFinishTasks(ExecutorService service) {
+        service.shutdown();
+        while (!service.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public enum ArchitectureType {
+        MULTI_THREAD_BLOCKING,
+        THREAD_POOL_BLOCKING,
+        NON_BLOCKING
+    }
+
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ServerUtils {
     public static Messages.ArrayMessage getSortedMessage(@Nullable Messages.ArrayMessage message) {
-        if (message != null){
+        if (message != null) {
             int[] arr = message.getArrayElementsList().stream().mapToInt(Integer::intValue).toArray();
             bubbleSort(arr);
             Messages.ArrayMessage.Builder builder = Messages.ArrayMessage.newBuilder();
@@ -47,5 +47,4 @@ public class ServerUtils {
             }
         }
     }
-
 }

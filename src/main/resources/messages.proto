@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option java_package = "ru.hse.spb.common.protocol";
+option java_outer_classname = "Messages";
+
+
+message ArrayMessage {
+    int32 elementsNum = 1;
+    repeated int32 arrayElements = 2;
+}
+
+
+message ArchitectureRequest {
+    enum ArchitectureType {
+        MULTI_THREAD_BLOCKING = 0;
+        THREAD_POOL_BLOCKING = 1;
+        NON_BLOCKING = 2;
+    }
+
+    ArchitectureType type = 1;
+}
+
+message BenchmarkRequest {
+}
+
+message ServerMasterRequest {
+    oneof msg {
+        ArchitectureRequest request1 = 2;
+        BenchmarkRequest request2 = 3;
+    }
+}
+
+message PortResponse {
+    int32 serverProcessingPort = 1;
+}
+message ServerBenchmarkResponse {
+    double averageSortingTime = 1;
+    double averageRequestTime = 2;
+}
+
+message ServerMasterResponse {
+    oneof msg {
+        PortResponse response1 = 2;
+        ServerBenchmarkResponse response2 = 3;
+    }
+}

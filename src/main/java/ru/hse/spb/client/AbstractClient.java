@@ -1,16 +1,11 @@
 package ru.hse.spb.client;
 
 import org.jetbrains.annotations.NotNull;
-import ru.hse.spb.common.CommonUtils;
-import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractClient implements Runnable {
     private final ClientUtils.ClientConfig clientConfig;
@@ -18,13 +13,12 @@ public abstract class AbstractClient implements Runnable {
     private volatile long finishTime;
 
     public AbstractClient(@NotNull ClientUtils.ClientConfig clientConfig) {
-
         this.clientConfig = clientConfig;
     }
 
     @Override
     public void run() {
-        this.startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         Socket socket = null;
         InputStream is = null;
         OutputStream os = null;
@@ -36,13 +30,15 @@ public abstract class AbstractClient implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            this.finishTime = System.currentTimeMillis();
             ClientUtils.closeAllResources(socket, is, os);
+            finishTime = System.currentTimeMillis();
         }
     }
 
-    private void startScheduling(Socket socket, InputStream is, OutputStream os) throws IOException {
-        startTime = System.currentTimeMillis();
+    private void startScheduling(@NotNull Socket socket,
+                                 @NotNull InputStream is,
+                                 @NotNull OutputStream os) throws IOException {
+
         for (int j = 0; j < clientConfig.getRequestNum(); j++) {
             process(is, os);
             try {
@@ -52,12 +48,15 @@ public abstract class AbstractClient implements Runnable {
             }
         }
         socket.close();
-        finishTime = System.currentTimeMillis();
     }
 
     protected abstract void process(InputStream is, OutputStream os) throws IOException;
 
-    public ClientUtils.ClientConfig getClientConfig() {
-        return clientConfig;
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public long getFinishTime() {
+        return finishTime;
     }
 }

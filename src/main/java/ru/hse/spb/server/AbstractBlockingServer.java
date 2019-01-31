@@ -2,6 +2,7 @@ package ru.hse.spb.server;
 
 import ru.hse.spb.client.ClientUtils;
 import ru.hse.spb.common.CommonUtils;
+import ru.hse.spb.common.benchmark.AverageTime;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
@@ -16,8 +17,11 @@ public abstract class AbstractBlockingServer extends AbstractServer {
     protected ServerSocket serverSocket = null;
     protected boolean isStopped = false;
 
-    protected AbstractBlockingServer(InetAddress serverAddress, int port) {
-        super(serverAddress, port);
+    protected AbstractBlockingServer(InetAddress serverAddress,
+                                     int port,
+                                     AverageTime sortingTime,
+                                     AverageTime processingTime) {
+        super(serverAddress, port, sortingTime, processingTime);
     }
 
 

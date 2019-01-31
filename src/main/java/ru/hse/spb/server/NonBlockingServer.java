@@ -1,6 +1,7 @@
 package ru.hse.spb.server;
 
 import ru.hse.spb.common.CommonUtils;
+import ru.hse.spb.common.benchmark.AverageTime;
 import ru.hse.spb.common.protocol.Messages;
 
 import java.io.IOException;
@@ -24,8 +25,11 @@ public class NonBlockingServer extends AbstractServer {
     private volatile Selector selector;
     private volatile ServerSocketChannel serverSocketChannel;
 
-    public NonBlockingServer(InetAddress serverAddress, int port) {
-        super(serverAddress, port);
+    public NonBlockingServer(InetAddress serverAddress,
+                             int port,
+                             AverageTime sortingTime,
+                             AverageTime processingTime) {
+        super(serverAddress, port, sortingTime, processingTime);
     }
 
 

@@ -8,12 +8,17 @@ public abstract class AbstractServer implements Runnable {
     protected final int serverPort;
     protected final InetAddress serverAddress;
 
-    protected final AverageTime sortingTime = new AverageTime();
-    protected final AverageTime processingTime = new AverageTime();
+    protected AverageTime sortingTime;
+    protected AverageTime processingTime;
 
-    protected AbstractServer(InetAddress serverAddress, int serverPort) {
+    protected AbstractServer(InetAddress serverAddress,
+                             int serverPort,
+                             AverageTime sortingTime,
+                             AverageTime processingTime) {
         this.serverPort = serverPort;
         this.serverAddress = serverAddress;
+        this.sortingTime = sortingTime;
+        this.processingTime = processingTime;
     }
 
     public final double getAverageSortingTime() {
@@ -38,6 +43,11 @@ public abstract class AbstractServer implements Runnable {
 
     final void addProcessingTime(long time) {
         processingTime.addTime(time);
+    }
+
+    final void resetStats() {
+        sortingTime.reset();
+        processingTime.reset();
     }
 
 
