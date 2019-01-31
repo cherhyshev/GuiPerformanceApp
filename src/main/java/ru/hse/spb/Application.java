@@ -22,13 +22,19 @@ public class Application {
         Thread serverMasterThread = new Thread(serverMaster);
         serverMasterThread.start();
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ClientUtils.ClientMasterConfig config = new ClientUtils.ClientMasterConfig(
-                new ClientUtils.VariableParameter(ClientUtils.ParameterName.N, 100, 1101, 100),
+                new ClientUtils.VariableParameter(ClientUtils.ParameterName.M, 5, 25, 2),
                 new ClientUtils.RegularParameter(ClientUtils.ParameterName.X, 10),
-                new ClientUtils.RegularParameter(ClientUtils.ParameterName.M, 10),
+                new ClientUtils.RegularParameter(ClientUtils.ParameterName.N, 500),
                 new ClientUtils.RegularParameter(ClientUtils.ParameterName.D, 10),
                 InetAddress.getLocalHost(), Constants.SERVER_MASTER_PORT, Constants.SERVER_PROCESSING_PORT,
-                CommonUtils.ArchitectureType.NON_BLOCKING);
+                CommonUtils.ArchitectureType.MULTI_THREAD_BLOCKING);
 
                 ClientMaster clientMaster = new ClientMaster(config);
 
@@ -44,14 +50,14 @@ public class Application {
         List<ClientUtils.ClientMasterConfig> configs = new ArrayList<>();
         for (CommonUtils.ArchitectureType type : CommonUtils.ArchitectureType.values()) {
             configs.add(new ClientUtils.ClientMasterConfig(
-                    new ClientUtils.VariableParameter(ClientUtils.ParameterName.N, 100, 1101, 100),
+                    new ClientUtils.VariableParameter(ClientUtils.ParameterName.N, 100, 5101, 500),
                     new ClientUtils.RegularParameter(ClientUtils.ParameterName.X, 10),
                     new ClientUtils.RegularParameter(ClientUtils.ParameterName.M, 10),
                     new ClientUtils.RegularParameter(ClientUtils.ParameterName.D, 10),
                     InetAddress.getLocalHost(), Constants.SERVER_MASTER_PORT, Constants.SERVER_PROCESSING_PORT,
                     type));
             configs.add(new ClientUtils.ClientMasterConfig(
-                    new ClientUtils.VariableParameter(ClientUtils.ParameterName.M, 1, 21, 2),
+                    new ClientUtils.VariableParameter(ClientUtils.ParameterName.M, 5, 25, 2),
                     new ClientUtils.RegularParameter(ClientUtils.ParameterName.X, 10),
                     new ClientUtils.RegularParameter(ClientUtils.ParameterName.N, 500),
                     new ClientUtils.RegularParameter(ClientUtils.ParameterName.D, 10),

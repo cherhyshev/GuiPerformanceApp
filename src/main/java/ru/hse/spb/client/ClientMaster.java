@@ -95,15 +95,20 @@ public final class ClientMaster implements Runnable {
 
                 double averageSortingTime = benchmarkResponse.getResponse2().getAverageSortingTime();
                 double averageRequestTime = benchmarkResponse.getResponse2().getAverageRequestTime();
+                switch (config.getVariableParameter().getParameterName()) {
+                    case M:
+                        stringBuilder.append(factory.getM()).append("|");
+                        break;
+                    case N:
+                        stringBuilder.append(factory.getN()).append("|");
+                        break;
+                    case D:
+                        stringBuilder.append(factory.getD()).append("|");
+                        break;
+                    default:
+                        break;
+                }
                 stringBuilder
-                        .append(factory.getN())
-                        .append("|")
-                        .append(factory.getM())
-                        .append("|")
-                        .append(factory.getD())
-                        .append("|")
-                        .append(factory.getX())
-                        .append("|")
                         .append(averageSortingTime)
                         .append("|")
                         .append(averageRequestTime)
@@ -118,22 +123,22 @@ public final class ClientMaster implements Runnable {
             ClientUtils.closeAllResources(socket, is, os);
         }
 
-        String fileSuffix = config.getArchitectureType().toString();
+        String fileSuffix = "";
         switch (config.getVariableParameter().getParameterName()) {
             case D:
-                fileSuffix += "_delayTime";
+                fileSuffix += "delay_";
                 break;
             case N:
-                fileSuffix += "_arrayLength";
+                fileSuffix += "length_";
                 break;
             case M:
-                fileSuffix += "_requestNum";
+                fileSuffix += "requests_";
                 break;
             default:
                 break;
         }
 
-        File file = new File(fileSuffix + ".txt");
+        File file = new File(fileSuffix + config.getArchitectureType().toString() + ".txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(stringBuilder.toString());
         } catch (IOException e) {
