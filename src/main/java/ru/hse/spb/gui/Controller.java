@@ -262,10 +262,7 @@ public class Controller {
                 + clientMasterConfig.getParameter2().getParameterName() + "="
                 + clientMasterConfig.getParameter2().getValue();
 
-        GuiUtils.saveChartAsImage(fileName + "_sortingTime", lc_AvgSortingTime);
-        GuiUtils.saveChartAsImage(fileName + "_processingTime", lc_AvgProcessingTime);
-        GuiUtils.saveChartAsImage(fileName + "_workingTime", lc_AvgWorkingTime);
-
+        GuiUtils.saveSceneAsImage(fileName, lc_AvgSortingTime.getScene());
     }
 
     @FXML

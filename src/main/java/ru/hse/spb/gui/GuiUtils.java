@@ -26,4 +26,14 @@ public class GuiUtils {
 
     }
 
+    public static final void saveSceneAsImage(String imageName, Scene scene) {
+        WritableImage snapShot = scene.snapshot(null);
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", new File(imageName + ".png"));
+        } catch (IOException ignored) {
+        }
+
+
+    }
+
 }
