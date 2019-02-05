@@ -21,7 +21,7 @@
          <font>
             <Font size="16.0" />
          </font></Label>
-      <TextField fx:id="tf_serverAddress" layoutX="148.0" layoutY="27.0" prefHeight="26.0" prefWidth="364.0" />
+      <TextField fx:id="tf_serverAddress" layoutX="148.0" layoutY="27.0" prefHeight="26.0" prefWidth="364.0" promptText="localhost" />
       <Label layoutX="14.0" layoutY="72.0" text="Архитектура:">
          <font>
             <Font size="16.0" />
@@ -50,7 +50,7 @@
          <font>
             <Font size="16.0" />
          </font></Label>
-      <CheckBox fx:id="cb_valOnArraySize" layoutX="16.0" layoutY="423.0" mnemonicParsing="false" text="Размер массива">
+      <CheckBox fx:id="cb_valOnArraySize" layoutX="16.0" layoutY="423.0" mnemonicParsing="false" onAction="#on_valArraySize" text="Размер массива">
          <font>
             <Font size="16.0" />
          </font></CheckBox>
@@ -59,38 +59,38 @@
             <Font size="18.0" />
          </font></Label>
       <TextField fx:id="tf_valOnArraySize" layoutX="315.0" layoutY="423.0" prefHeight="26.0" prefWidth="150.0" />
-      <CheckBox fx:id="cb_valOnClientsNum" layoutX="16.0" layoutY="460.0" mnemonicParsing="false" text="Клиентов одновременно">
+      <CheckBox fx:id="cb_valOnClientsNum" layoutX="16.0" layoutY="460.0" mnemonicParsing="false" onAction="#on_valClientsNum" text="Клиентов одновременно">
          <font>
             <Font size="16.0" />
          </font></CheckBox>
       <TextField fx:id="tf_valOnClientsNum" layoutX="315.0" layoutY="460.0" prefHeight="26.0" prefWidth="150.0" />
-      <CheckBox fx:id="cb_valOnDelay" layoutX="16.0" layoutY="495.0" mnemonicParsing="false" text="Задержка клиента">
+      <CheckBox fx:id="cb_valOnDelay" layoutX="16.0" layoutY="495.0" mnemonicParsing="false" onAction="#on_valDelay" text="Задержка клиента">
          <font>
             <Font size="16.0" />
          </font></CheckBox>
       <TextField fx:id="tf_valOnDelay" layoutX="315.0" layoutY="495.0" prefHeight="26.0" prefWidth="150.0" />
       <LineChart fx:id="lc_AvgSortingTime" layoutX="640.0" layoutY="20.0" prefHeight="250.0" prefWidth="600.0" title="Среднее время сортировки массива">
         <xAxis>
-          <NumberAxis side="BOTTOM" />
+          <NumberAxis side="BOTTOM" fx:id="x_axis_AvgSortingTime" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis fx:id="y_axis_AvgSortingTime" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart fx:id="lc_AvgRequestTime" layoutX="640.0" layoutY="270.0" prefHeight="250.0" prefWidth="600.0" title="Среднее время обработки запроса">
+      <LineChart fx:id="lc_AvgProcessingTime" layoutX="640.0" layoutY="270.0" prefHeight="250.0" prefWidth="600.0" title="Среднее время обработки запроса">
         <xAxis>
-          <NumberAxis side="BOTTOM" />
+          <NumberAxis side="BOTTOM" fx:id="x_axis_AvgProcessingTime" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis fx:id="y_axis_AvgProcessingTime" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart fx:id="lc_AvgProcessingTime" layoutX="640.0" layoutY="520.0" prefHeight="250.0" prefWidth="600.0" title="Среднее время работы клиента">
+      <LineChart fx:id="lc_AvgWorkingTime" layoutX="640.0" layoutY="520.0" prefHeight="250.0" prefWidth="600.0" title="Среднее время работы клиента">
          <xAxis>
-            <NumberAxis side="BOTTOM" />
+            <NumberAxis side="BOTTOM" fx:id="x_axis_AvgWorkingTime" />
          </xAxis>
          <yAxis>
-            <NumberAxis side="LEFT" />
+            <NumberAxis fx:id="y_axis_AvgWorkingTime" side="LEFT" />
          </yAxis>
       </LineChart>
       <MenuButton fx:id="mb_SelectArch" layoutX="148.0" layoutY="72.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="364.0" text="Выберите...">
@@ -112,5 +112,9 @@
             <MenuItem fx:id="mi_varClientsDelay" mnemonicParsing="false" onAction="#on_varClientsDelay" text="Задержка клиента" />
         </items>
       </MenuButton>
+      <Button layoutX="179.0" layoutY="564.0" mnemonicParsing="false" onAction="#on_saveCharts" prefHeight="50.0" prefWidth="150.0" text="Сохранить графики">
+         <font>
+            <Font size="12.0" />
+         </font></Button>
    </children>
 </Pane>

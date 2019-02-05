@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Application {
+public class AppRunner {
     public static void main(String[] args) throws UnknownHostException {
 
         ServerMaster serverMaster = new ServerMaster(InetAddress.getLocalHost(), Constants.SERVER_MASTER_PORT,
@@ -36,7 +36,7 @@ public class Application {
                 InetAddress.getLocalHost(), Constants.SERVER_MASTER_PORT, Constants.SERVER_PROCESSING_PORT,
                 CommonUtils.ArchitectureType.MULTI_THREAD_BLOCKING);
 
-                ClientMaster clientMaster = new ClientMaster(config);
+        ClientMaster clientMaster = new ClientMaster(config);
 
         ExecutorService service1 = Executors.newSingleThreadExecutor();
         service1.submit(clientMaster);

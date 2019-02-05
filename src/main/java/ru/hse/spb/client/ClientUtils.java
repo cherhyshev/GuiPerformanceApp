@@ -91,7 +91,7 @@ public class ClientUtils {
     }
 
     public static abstract class Parameter {
-        private final ParameterName parameterName;
+        protected final ParameterName parameterName;
 
         protected Parameter(ParameterName parameterName) {
             this.parameterName = parameterName;

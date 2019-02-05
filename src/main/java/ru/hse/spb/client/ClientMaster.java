@@ -1,8 +1,8 @@
 package ru.hse.spb.client;
 
-import ru.hse.spb.common.CommonUtils;
 import ru.hse.spb.common.Constants;
 import ru.hse.spb.common.benchmark.AverageTime;
+import ru.hse.spb.common.benchmark.SingleIterationBenchmark;
 import ru.hse.spb.common.exception.BadConfigurationException;
 import ru.hse.spb.common.protocol.Messages;
 
@@ -10,12 +10,11 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public final class ClientMaster implements Runnable {
     private final ClientUtils.ClientMasterConfig config;
-    private final StringBuilder stringBuilder = new StringBuilder();
+
+    private List<SingleIterationBenchmark> benchmarkList = new ArrayList<>();
 
     public ClientMaster(ClientUtils.ClientMasterConfig config) {
         this.config = config;
@@ -57,7 +56,6 @@ public final class ClientMaster implements Runnable {
                     || response.getResponse1().getServerProcessingPort() != Constants.SERVER_PROCESSING_PORT) {
                 System.err.println("ERROR! Bad port received from ServerMaster");
             }
-            ExecutorService executorService;
             for (ClientFactory factory : factories) {
                 AverageTime averageClientTime = new AverageTime();
                 List<AbstractClient> clients = factory.generateClients();
@@ -95,26 +93,28 @@ public final class ClientMaster implements Runnable {
 
                 double averageSortingTime = benchmarkResponse.getResponse2().getAverageSortingTime();
                 double averageRequestTime = benchmarkResponse.getResponse2().getAverageRequestTime();
+                int parameterValue = 0;
                 switch (config.getVariableParameter().getParameterName()) {
                     case M:
-                        stringBuilder.append(factory.getM()).append("|");
+                        parameterValue = factory.getM();
                         break;
                     case N:
-                        stringBuilder.append(factory.getN()).append("|");
+                        parameterValue = factory.getN();
                         break;
                     case D:
-                        stringBuilder.append(factory.getD()).append("|");
+                        parameterValue = factory.getD();
                         break;
                     default:
                         break;
                 }
-                stringBuilder
-                        .append(averageSortingTime)
-                        .append("|")
-                        .append(averageRequestTime)
-                        .append("|")
-                        .append(averageClientTime.getAverageTime())
-                        .append("\n");
+                benchmarkList.add(new SingleIterationBenchmark(parameterValue, averageClientTime.getAverageTime(), averageSortingTime, averageRequestTime));
+//                stringBuilder
+//                        .append(averageSortingTime)
+//                        .append("|")
+//                        .append(averageRequestTime)
+//                        .append("|")
+//                        .append(averageClientTime.getAverageTime())
+//                        .append("\n");
                 averageClientTime.reset();
             }
         } catch (IOException e) {
@@ -123,27 +123,27 @@ public final class ClientMaster implements Runnable {
             ClientUtils.closeAllResources(socket, is, os);
         }
 
-        String fileSuffix = "";
-        switch (config.getVariableParameter().getParameterName()) {
-            case D:
-                fileSuffix += "delay_";
-                break;
-            case N:
-                fileSuffix += "length_";
-                break;
-            case M:
-                fileSuffix += "requests_";
-                break;
-            default:
-                break;
-        }
-
-        File file = new File(fileSuffix + config.getArchitectureType().toString() + ".txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(stringBuilder.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        String fileSuffix = "";
+//        switch (config.getVariableParameter().getParameterName()) {
+//            case D:
+//                fileSuffix += "delay_";
+//                break;
+//            case N:
+//                fileSuffix += "length_";
+//                break;
+//            case M:
+//                fileSuffix += "requests_";
+//                break;
+//            default:
+//                break;
+//        }
+//
+//        File file = new File(fileSuffix + config.getArchitectureType().toString() + ".txt");
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+//            writer.write(stringBuilder.toString());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private List<ClientFactory> generateFactories() {
@@ -180,5 +180,9 @@ public final class ClientMaster implements Runnable {
                     config.getServerProcessingPort(), config.getServerAddress(), config.isBlocking())));
         }
         return factories;
+    }
+
+    public List<SingleIterationBenchmark> getBenchmarkList() {
+        return benchmarkList;
     }
 }
